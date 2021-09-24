@@ -1,4 +1,4 @@
-function dragpoints_2(xData,yData,xLower,xUpper,yLower,yUpper)
+function dragpoints_2_v1(xData,yData,xLower,xUpper,yLower,yUpper)
 global openmha
 global x
 global y
@@ -11,7 +11,7 @@ area = (1/3)*(20*20);
 assignin('base','points',points)
 count = 0;
 point_count = 0;
-points = zeros(1000,2); % First column is x and the second is y 
+points = zeros(1000,3); % First column is x and the second is y third column is the weight
 
 %Setting Up The Correct Directories 
 
@@ -22,7 +22,6 @@ javaaddpath('/usr/local/lib/openmha/mfiles/mhactl_java.jar')
 openmha = mha_start;       %Starts openMHA software
 mha_query(openmha,'','read:final_dc_live.cfg'); %Selects the .cfg file to read
 
-
 if nargin == 0 
   xData = 0;
   yData = 0;
@@ -31,6 +30,7 @@ if nargin == 0
   yLower = -20;
   yUpper = 20;
 end
+
 figure('unit','normalized',...
     'position',[.1 .1 .8 .8]);
 
@@ -48,7 +48,6 @@ hObject2 = handles.hbutton2;
 guidata(hObject1, handles);
 guidata(hObject2, handles);
 
-
 x = xData;
 y = yData;
 
@@ -56,8 +55,6 @@ ax = axes('xlimmode','manual','ylimmode','manual');
 ax.XLim = [xLower xUpper];
 ax.YLim = [yLower yUpper];
 
-%can change the marker size or marker type to make it more visible.
-%Currently is set to small points at a size of 2 so is not very visible.
 handles.hbutton1.Callback = {@button_callback, handles};
 handles.hbutton2.Callback = {@button_callback, handles};
 line(x,y,'color','r','marker','.','markersize',105,'hittest','on','buttondownfcn',@clickmarker)
@@ -70,15 +67,17 @@ global y
 global count
 global area_explored
 global area
-
+global points
+global point_count
 
 buttonID = src.Tag;              %Sets the tag for the buttons 
 stateII= str2num(buttonID);      %Converts the tag to a state 
 
-%Drops the pin when user clicks "Save"
-if (count == 3 || area_explored > area)
+%Next Trial function
+if (count == 3) | (area_explored > area)
      handles.hbutton1.Enable = 'off';
      handles.hbutton2.Enable = 'on';
+     points(point_count,3) = 2;
 else
     if  stateII == 1 % Dropping a pin 
         xy = get(gca,'CurrentPoint');
@@ -87,6 +86,13 @@ else
         %location = [x y]
         viscircles([x,y], 2);
         count = count + 1;
+        xy = get(gca,'CurrentPoint');
+        x_curr = xy(1,1);
+        y_curr = xy(1,2);
+        point_count = point_count + 1;
+        points(point_count,1) = x_curr; 
+        points(point_count,2) = y_curr;
+        points(point_count,3) = 1; 
     end
 end
 
