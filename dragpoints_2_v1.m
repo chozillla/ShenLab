@@ -2,16 +2,19 @@ function dragpoints_2_v1(xData,yData,xLower,xUpper,yLower,yUpper)
 global openmha
 global x
 global y
-global count 
-global point_count 
+global num_pins % Number of pins
+global point_count % Number of datapoints from the cursor 
 global points
 global area 
+global handles
+global trial_count 
 
-area = (1/3)*(20*20);
+area = (1/3)*(20*20); % Total area of the screen
 assignin('base','points',points)
-count = 0;
+num_pins = 0;
 point_count = 0;
 points = zeros(1000,3); % First column is x and the second is y third column is the weight
+trial_count = 0; % Number of trials 
 
 %Setting Up The Correct Directories 
 
@@ -45,6 +48,7 @@ handles.hbutton2 = uicontrol('style','pushbutton',...,
 
 hObject1 = handles.hbutton1;
 hObject2 = handles.hbutton2;
+
 guidata(hObject1, handles);
 guidata(hObject2, handles);
 
@@ -57,43 +61,67 @@ ax.YLim = [yLower yUpper];
 
 handles.hbutton1.Callback = {@button_callback, handles};
 handles.hbutton2.Callback = {@button_callback, handles};
-line(x,y,'color','r','marker','.','markersize',105,'hittest','on','buttondownfcn',@clickmarker)
+line(x,y,'color','c','marker','.','markersize',105,'hittest','on','buttondownfcn',@clickmarker) %Change this with rectangle that's filled 
 
-%Callback For Start, Stop, Quit Buttons
+%Callback For Pin & Next Buttons
 
 function button_callback(src,~,handles)
 global x
 global y
-global count
+global num_pins
 global area_explored
 global area
 global points
 global point_count
+global trial_count
 
 buttonID = src.Tag;              %Sets the tag for the buttons 
-stateII= str2num(buttonID);      %Converts the tag to a state 
+stateII = str2num(buttonID);    %Converts the tag to a state 
 
-%Next Trial function
-if (count == 3) | (area_explored > area)
+if (num_pins == 3) || (area_explored > area)
+     %h = findall(gcf,'Type','line');
+     h = findall(gca,'Type','rectangle'); % use a tag to search for each pin 
+     delete(h) % Removes all the pins
+     %set(h,'Visible','off');
+     %delete(handles.circle)
      handles.hbutton1.Enable = 'off';
      handles.hbutton2.Enable = 'on';
+     pause(5/1000)
      points(point_count,3) = 2;
+     trial_count = trial_count +1;
+     num_pins = 0;
+     area_explored = 0;
+     disp(num_pins)
 else
     if  stateII == 1 % Dropping a pin 
+        disp(stateII)
         xy = get(gca,'CurrentPoint');
         x = xy(1,1);
         y = xy(1,2);
         %location = [x y]
-        viscircles([x,y], 2);
-        count = count + 1;
-        xy = get(gca,'CurrentPoint');
+        num_pins = num_pins + 1;
+        %handles.circle{count} = viscircles([x,y], 2); % Use annotation or
+        %rectangle to drop a circle
+        %radius
+        r = 1;
+        c = [x y];
+        pos = [c-r 2*r 2*r];
+        rectangle('Position',pos,'Curvature',[1 1],'EdgeColor','r')
         x_curr = xy(1,1);
         y_curr = xy(1,2);
         point_count = point_count + 1;
         points(point_count,1) = x_curr; 
         points(point_count,2) = y_curr;
-        points(point_count,3) = 1; 
+        points(point_count,3) = 1;
+        drawnow limitrate
+    elseif stateII == 2 % Next button
+        handles.hbutton1.Enable = 'on';
+        handles.hbutton2.Enable = 'off';
+        num_pins = 0;
+        Y = [num_pins 'Next_button'];
+        disp(Y)
     end
+    drawnow
 end
 
 function clickmarker(src,ev)
@@ -107,17 +135,19 @@ global points
 global point_count
 global area_explored
 
+%disp("drag marker")
 
 %This calculates the area explored by the user
 x_range = range(points(:,1));
 y_range = range(points(:,2));
-area_explored = x_range * y_range
+area_explored = x_range * y_range;
 
 %get current axes and coords
 %h2 = findall(groot,'Type','Axes');
 buttonID = src.Tag;              %Sets the tag for the buttons 
 stateII= str2num(buttonID);      %Converts the tag to a state 
 if  stateII == 1
+    %disp("pin1")
     h1 = gco;
     x = h1.XData;
     y = h1.YData;
@@ -126,10 +156,12 @@ try
     h1 = gca;
     x = h1.Children.XData;
     y = h1.Children.YData;
+    %disp("pin2")
 catch
     try
         x = h1.Children(2).XData;
         y = h1.Children(2).YData;
+        %disp("pin3")
     catch
     end
 end
