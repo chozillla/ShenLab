@@ -11,7 +11,8 @@ global trial_count % number of trials, which is counted when the user clicks the
 assignin('base','points',points) % saving this variable to the workspace for easy viewing
 num_pins = 0;
 point_count = 0;
-points = zeros(1000,3); % First column is x and the second is y third column is the weight of the coordinate pair
+points = zeros(1000,4); % First column is x and the second is y third column is the weight of the coordinate pair
+                        % the fourth column is the trial number.
                         % dropping a pin is a weight of 1 and clicking next
                         % is a weight of 2 
 trial_count = 0; % Number of trials 
@@ -36,6 +37,9 @@ end
 
 figure('unit','normalized',...  % creates the MATLAB figure
     'position',[.1 .1 .8 .8]);
+    % 1           1        1680        1050 counter balance that ratio to
+    % get a square as a
+    % ratio between 3rd and the 4th is the one you want to apply
 
 handles.hbutton1 = uicontrol('style','pushbutton',...,  % creates the "Pin" button with the various properties
     'unit','normalized',...,
@@ -61,6 +65,7 @@ ax.YLim = [yLower yUpper];
 
 handles.hbutton1.Callback = {@button_callback, handles}; 
 handles.hbutton2.Callback = {@button_callback, handles};
+axis square
 line(x,y,'color','c','marker','.','markersize',105,'hittest','on','buttondownfcn',@clickmarker) %Change this with rectangle that's filled 
 
 %Callback For Pin & Next Buttons
@@ -83,9 +88,8 @@ area_explored = x_range * y_range;  % area explored by the user
 buttonID = src.Tag;              %Sets the tag for the buttons 
 stateII = str2double(buttonID);    %Converts the tag to a state 
 
-%if (num_pins == 3) || (area_explored > area)
-if ((num_pins == 3)||(area_explored > surface_area))
-     disp(area_explored)
+%if ((num_pins == 3)||(area_explored > surface_area))
+if (num_pins == 3)
      h = findall(gca,'Type','rectangle'); % use a tag to search for each pin 
      delete(h) % Removes all the pins
      handles.hbutton1.Enable = 'off'; % "Pin" button
@@ -95,7 +99,6 @@ if ((num_pins == 3)||(area_explored > surface_area))
      trial_count = trial_count +1;
      num_pins = 0;
      area_explored = 0;
-     disp("trial")
 else
     if  stateII == 1 % Dropping a pin 
         disp("pin")
@@ -124,7 +127,7 @@ else
         h = findall(gca,'Type','line'); %this is the cursor 
         set(h,'XData',0)    % setting the x coordinate to 0
         set(h,'Ydata',0)    % setting the y coordinate to 0 
-        disp("next")
+        disp(trial_count)
     end
     drawnow
 end
