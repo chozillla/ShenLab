@@ -1,16 +1,15 @@
-function dragpoints_2_v6(xData,yData,xLower,xUpper,yLower,yUpper)
+function dragpoints_2_v7(xData,yData,xLower,xUpper,yLower,yUpper)
 global openmha
-global trial_num
 
 %Setting Up The Correct Directories 
 
-% setenv('PATH', [getenv('PATH') ':/usr/local/bin']); % Make sure to change this to your appropiate directory        
-% addpath('/usr/local/lib/openmha/mfiles/') % Make sure to change this to your appropiate directory        
-% javaaddpath('/usr/local/lib/openmha/mfiles/mhactl_java.jar') % Make sure to change this to your appropiate directory        
-% 
-% openmha = mha_start;       % initializes openMHA software
-% mha_query(openmha,'','read:final_dc_live.cfg'); % selects the .cfg file to read
-% mha_set(openmha,'cmd','start'); % starts openMHA software
+setenv('PATH', [getenv('PATH') ':/usr/local/bin']); % Make sure to change this to your appropiate directory        
+addpath('/usr/local/lib/openmha/mfiles/') % Make sure to change this to your appropiate directory        
+javaaddpath('/usr/local/lib/openmha/mfiles/mhactl_java.jar') % Make sure to change this to your appropiate directory        
+
+openmha = mha_start;       % initializes openMHA software
+mha_query(openmha,'','read:final_dc_live.cfg'); % selects the .cfg file to read
+mha_set(openmha,'cmd','start'); % starts openMHA software
 
 if nargin == 0 % default input variables
   xData = 0;
@@ -87,7 +86,7 @@ if (num_pins == 3) % currently this condition fires only when all 3 pins are use
      data{4,1,pin_count} = y; % saving y coordinate to the data structure
      data{5,1,pin_count} = 2; % saving weight when there's a pin dropped
      num_pins = 0; % resets the number of pins back to  at the end of the trial
-%      mha_set(openmha,'cmd','stop');
+     mha_set(openmha,'cmd','stop');
 else
     if  stateII == 1 % Dropping a pin 
         xy = get(gca,'CurrentPoint');
@@ -115,9 +114,9 @@ else
         index = find(flag == 2);
         trial_num = length(index);
         if trial_num > 50
-            %mha_set(openmha,'cmd','stop');
-            %mha_set(openmha,'cmd','quit');
-            %close all
+            mha_set(openmha,'cmd','stop');
+            mha_set(openmha,'cmd','quit');
+            close all
         end
         handles.htxt.String = sprintf('Trial %d out of 50',trial_num);
         next = data(:,:,index(end,1));
@@ -125,7 +124,7 @@ else
         h = findall(gca,'Type','line'); %this is the cursor 
         set(h,'XData',0)    % setting the x coordinate to 0
         set(h,'Ydata',0)    % setting the y coordinate to 0 
-%         mha_set(openmha,'cmd','start');
+        mha_set(openmha,'cmd','start');
     end
     drawnow
 end
@@ -185,7 +184,7 @@ B = isempty(data);
                     [G(4) G(4) G(4)];[G(5) G(5) G(5)];[G(6) G(6) G(6)];...
                     [G(1) G(1) G(1)];[G(2) G(2) G(2)];[G(3) G(3) G(3)];...
                     [G(4) G(4) G(4)];[G(5) G(5) G(5)];[G(6) G(6) G(6)]];
-%         mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     else
         flag = cell2mat(data(5,1,:));
         index = find(flag == 2);
@@ -201,7 +200,7 @@ B = isempty(data);
                     [G(4) G(4) G(4)];[G(5) G(5) G(5)];[G(6) G(6) G(6)];...
                     [G(1) G(1) G(1)];[G(2) G(2) G(2)];[G(3) G(3) G(3)];...
                     [G(4) G(4) G(4)];[G(5) G(5) G(5)];[G(6) G(6) G(6)]];
-%         mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     end
     
 %check which data point has the smallest distance to the dragged point

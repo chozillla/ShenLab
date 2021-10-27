@@ -6,7 +6,6 @@ global data % data structure that holds all the recorded data
 global trial_count % number of trials, which is counted when the user clicks the next pin 
 global a % intialize random weight
 global Glast % the gain in 6 frequency bands of the previous trial 
-global simga0 % how much noise for 
 
 num_trials = 53;
 data = cell(6,1,(num_trials));
@@ -29,4 +28,4 @@ trial_count = 0; % Number of trials
 pin_count = 1; % total number of pins used 
 assignin('base','data',data);
 
-dragpoints_2_v6()
+dragpoints_2_v7()
