@@ -8,9 +8,9 @@ global pin_count % related to the total number of individual "trials"
                  % fully confirmed it 
 global trial_num % this is number of trials, the user has confirmed the their preferance
 global total_trial_num % the target number of trials for the patient to use
-max_pins = 2;
+max_pins = 25;
 file_cont = 0; % used to flag if the patient is continuing from a previous session
-total_trial_num = 50; % the total of trials
+total_trial_num = 51; % the total of trials
 
 %Setting Up The Correct Directories 
 
