@@ -73,7 +73,10 @@ y = yData;
 
 ax = axes('xlimmode','manual','ylimmode','manual');
 ax.XLim = [xLower xUpper];
+set(gca,'XTickLabel',[]);
 ax.YLim = [yLower yUpper];
+set(gca,'YTickLabel',[]);
+grid on
 
 handles.hbutton1.Callback = {@button_callback, handles}; 
 handles.hbutton2.Callback = {@button_callback, handles};
