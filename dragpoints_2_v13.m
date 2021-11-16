@@ -231,7 +231,7 @@ B = isempty(data);
     else
         flag = cell2mat(data(5,:));
         index = find(flag == 2);
-        glast = cell2mat(data(2,index(end))); 
+        glast = data(2,index(end)); 
         Glast = awgn(glast,5);
         G = cell2mat(Glast) + x1 + x2*a;
         if any(G(:,1) > 30)
