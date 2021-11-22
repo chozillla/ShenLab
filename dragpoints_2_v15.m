@@ -242,11 +242,11 @@ B = isempty(data);
                     [G(4) G(4) G(4)];[G(5) G(5) G(5)];[G(6) G(6) G(6)]];
 %         mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     else
-        Glast = cell2mat(data(2,index(end))); 
-        Grnd = std(glast);
-        noise = Grnd*randn(6,1) + Glast;
         flag = cell2mat(data(5,:));
         index = find(flag == 2);
+        Glast = cell2mat(data(2,index(end))); 
+        Grnd = std(Glast);
+        noise = Grnd*randn(6,1) + Glast;
         G = Glast + x1 + x2*a + noise;
         if any(G(:,1) > 30)
             g_new_idx = G > 30;

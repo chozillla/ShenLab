@@ -46,9 +46,9 @@ prompt= 'Please Type In Patient ID: ';
 name=input(prompt,'s');
 fname=[name,datestr(now, 'dd-mmm-yyyy'),'.mat'];
 if isfile(fname)
-     dragpoints_2_v14(fname)
+     dragpoints_2_v15(fname)
      disp("file_found")
 else
-     dragpoints_2_v14()
+     dragpoints_2_v15()
      disp("file_not_found")
 end
