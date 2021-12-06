@@ -167,13 +167,15 @@ else
         if file_cont == 0
             if pin_count >= 78 % 25 trials
                 %mha_set(openmha,'cmd','stop');
-                save(fname)
+                b = string(fname);
+                save(b)
                 close all
             end
         else
             if pin_count >= 153 % 50 trials 
 %                 mha_set(openmha,'cmd','quit');
-                save(fname)
+                b = string(fname);
+                save(b)
                 close all
             end
         end
@@ -220,11 +222,11 @@ x2 = x_curr;
 if pin_count < 16 % after five trials 
     G = Glast + x1 + x2*a; % <----- This is the mapping equation 
 else
-%     flag = data{5,pin_count};
-%     if flag == 2
-        gt = cell2mat(data(2,:));
-        variance = std(gt,0,2);
-        if any(variance > 3)
+    flag = data{5,pin_count};
+        if flag == 2
+%         gt = cell2mat(data(2,:));
+%         variance = std(gt,0,2);
+%         if any(variance > 3)
             Glast = cell2mat(data(2,(pin_count - 1)));
             Grnd = 3; % 3 dB noise 
             noise = Grnd*randn(6,1);

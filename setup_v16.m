@@ -33,9 +33,12 @@ trial_count = 0; % Number of trials
 pin_count = 1; % total number of pins used 
 assignin('base','data',data);
 
-prompt= 'Please Type In Patient ID: ';
-name=input(prompt,'s');
-fname=[name,datestr(now, 'dd-mmm-yyyy'),'.mat'];
+prompt = {'Enter patient name:','Enter patient ID'};
+dlgtitle = 'Input';
+dims = [10 50; 10 50];
+answer = inputdlg(prompt,dlgtitle,dims);
+fname = join(answer);
+
 if isfile(fname)
      dragpoints_2_v16(fname)
      disp("file_found")
