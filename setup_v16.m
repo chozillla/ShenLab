@@ -9,17 +9,6 @@ global Glast % the gain in 6 frequency bands of the previous trial
 global fname % file name 
 global noise
 % things to do:
-% make sure the number of pins is 2(done) 
-% clean up the code for storing the data, make a 2D matrix(done)
-% include a prompt for experiment to put in the patient info (done)
-% delete unnecessary data storage (done) 
-% resume and continue data collection from a preivous session (done)
-% fix the current trial number that is being displayed to the user (done)
-% dynamically read and do do analysis from patient name, stuck on getting
-% (done)
-% the file name to a string from a cell(done) 
-% set into blocks of 25 not 50 (done)
-% add the new noise term (done) 
 % look into averaging the noise at different trial levels 
 
 num_pins = 153;

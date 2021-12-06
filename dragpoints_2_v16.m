@@ -107,8 +107,7 @@ global noise
 
 buttonID = src.Tag;              %Sets the tag for the buttons
 stateII = str2double(buttonID);    %Converts the tag to a state
-if (num_pins == 2) % currently this condition fires only when all 3 pins are used, make this
-    % so that it is a maximum of 3 pins
+if (num_pins == 2) 
     handles.hbutton1.Enable = 'off'; % "Pin" button
     handles.hbutton2.Enable = 'on'; % "Next" button
     xy = get(gca,'CurrentPoint');
@@ -128,24 +127,6 @@ else
         xy = get(gca,'CurrentPoint');
         x = xy(1,1);
         y = xy(1,2);
-        %         if pin_count < 5
-        %             Glast = zeros(6,1);
-        %             G = Glast + x + y*a;
-        %         else
-        %             flag = data{5,pin_count-1};
-        %             if flag == 2
-        %                 index = find(flag == 2);
-        %                 Glast = cell2mat(data(2,index(end)));
-        %                 Grnd = 2;
-        %                 noise = Grnd*randn(6,1);
-        %                 G = Glast + x + y*a + noise;
-        %             else
-        %                 index = find(flag == 2);
-        %                 Glast = cell2mat(data(2,index(end)));
-        %                 G = Glast + x + y*a;
-        %             end
-        %
-        %         end
         pin_count = pin_count + 1;
         r = 2;
         c = [x y];
@@ -184,13 +165,13 @@ else
         set(h,'Ydata',0)    % setting the y coordinate to 0
 %         mha_set(openmha,'cmd','start');
         if file_cont == 0
-            if pin_count >= 78
+            if pin_count >= 78 % 25 trials
                 %mha_set(openmha,'cmd','stop');
                 save(fname)
                 close all
             end
         else
-            if pin_count >= 153
+            if pin_count >= 153 % 50 trials 
 %                 mha_set(openmha,'cmd','quit');
                 save(fname)
                 close all
@@ -213,8 +194,8 @@ global data
 global G
 global pin_count
 global noise
-global x % X coordinate
-global y % Y coordinate
+global x 
+global y 
 
 buttonID = src.Tag;              %Sets the tag for the buttons
 stateII= str2num(buttonID);      %Converts the tag to a state
@@ -237,17 +218,17 @@ x1 = y_curr;
 x2 = x_curr;
 
 if pin_count < 16 % after five trials 
-    G = Glast + x1 + x2*a; % this is the formula that creates the gains
+    G = Glast + x1 + x2*a; % <----- This is the mapping equation 
 else
-    flag = data{5,pin_count};
-    if flag == 2
+%     flag = data{5,pin_count};
+%     if flag == 2
         gt = cell2mat(data(2,:));
         variance = std(gt,0,2);
-        if any(variance < 3)
+        if any(variance > 3)
             Glast = cell2mat(data(2,(pin_count - 1)));
             Grnd = 3; % 3 dB noise 
             noise = Grnd*randn(6,1);
-            G = Glast + x1 + x2*a + noise;
+            G = Glast + x1 + x2*a + noise; % <----- This is the mapping equation with added noise 
             data{6,pin_count} = noise; % saving noise
             disp(noise)
         else
@@ -255,7 +236,7 @@ else
             G = Glast + x1 + x2*a;
             disp("no noise added")
         end
-    end
+%     end
 end
 
 if any(G(:,1) > 30)
