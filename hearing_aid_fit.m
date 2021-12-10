@@ -7,7 +7,7 @@ openmha.host = '10.0.0.1';
 % openMHA default TCP port
 openmha.port= 33337;
 
-prompt = 'Input Gain Values i.e [ 12, 10, 43, 43, 3, 4]: ';
+prompt = 'Input Gain Values(250hz, 500, 1000, 2000, 4000, 8000) i.e [ 12, 10, 43, 43, 3, 4]: ';
 G = input(prompt);
 
 figure('name','figure1','unit','normalized',...  % creates the MATLAB figure
@@ -27,7 +27,7 @@ handles.hbutton2 = uicontrol('style','pushbutton',...,  % creates the "stop" but
 %     'fontsize', 28);
 q = [250, 500, 1000, 2000, 4000, 8000];
 
-plot(q,G,'-or','linewidth',3)
+semilogx(q,G,'-or','linewidth',3)
 xlabel("Hertz")
 %xticklabels({'250', '500', '1000', '2000', '4000', '8000'})
 ylabel("dB")
