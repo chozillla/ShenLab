@@ -10,10 +10,10 @@ addpath('C:\Program Files\openMHA\mfiles')
 javaaddpath('C:\Program Files\openmha\mfiles\mhactl_java.jar')
 
 % IP address of mahalia running on PHL when using wireless
-% openmha.host = '10.0.0.1';
-% % openMHA default TCP port
-% openmha.port= 33337;
-% mha_query(openmha,'','read:final_dc_live.cfg'); %Selects the .cfg file to read
+openmha.host = '10.0.0.1';
+% openMHA default TCP port
+openmha.port= 33337;
+mha_query(openmha,'','read:final_dc_live.cfg'); %Selects the .cfg file to read
 
 %set up the boundaries of the layout
 handles.hs = uipanel(figure('unit','normalized',...
@@ -167,44 +167,38 @@ gaintable_og = [[ch1 ch1 ch1];[ch2 ch2 ch2];[ch3 ch3 ch3];[ch4 ch4 ch4];[ch5 ch5
 if stateI == 1                          %Updates the gain table in openMHA based on state of the tag
     
     set(handles.hslider1,'UserData',ch1);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     pause(0.001);
-    disp("1")
 end
 
 if stateI == 2                         %Updates the gain table in openMHA based on state of the tag
     set(handles.hslider2,'UserData',ch2);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     pause(0.001);
-    disp("2")
 end
 
 if stateI == 3                          %Updates the gain table in openMHA based on state of the tag
     set(handles.hslider3,'UserData',ch3);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     pause(0.001);
-    disp("3")
 end
 
 if stateI == 4                          %Updates the gain table in openMHA based on state of the tag
     set(handles.hslider4,'UserData',ch4);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     pause(0.001);
-    disp("4")
 end
 
 if stateI == 5                          %Updates the gain table in openMHA based on state of the tag
     set(handles.hslider5,'UserData',ch5);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
     pause(0.001);
-    disp("5")
 end
 
 if stateI == 6                          %Updates the gain table in openMHA based on state of the tag
     
     set(handles.hslider6,'UserData',ch6);
-    %     mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
-    disp("6")
+        mha_set(openmha,'mha.overlapadd.mhachain.dc.gtdata',gaintable_og);
 end
 
 end
@@ -220,21 +214,21 @@ buttonID = src.Tag;              %Sets the tag for the buttons
 stateII= str2num(buttonID);      %Converts the tag to a state
 
 if  stateII == 1
-    %     mha_set(openmha,'cmd','start');     %Starts openMHA
+        mha_set(openmha,'cmd','start');     %Starts openMHA
     set(handles.hbutton1,'enable','off');
     set(handles.hbutton2,'enable','on');
     set(handles.hbutton3,'enable','on');
-    %
+    
     
 elseif stateII == 2
-    %     mha_set(openmha,'cmd','stop');       %Stops openMHA
+        mha_set(openmha,'cmd','stop');       %Stops openMHA
     set(handles.hbutton2,'enable','off');
     set(handles.hbutton1,'enable','on');
     set(handles.hbutton3,'enable','on');
     
 else stateII == 3
-    %     mha_set(openmha,'cmd','stop');
-    %     mha_set(openmha,'cmd','quit');       %Quits openMHA
+        mha_set(openmha,'cmd','stop');
+        mha_set(openmha,'cmd','quit');       %Quits openMHA
     set(handles.hbutton2,'enable','off');
     set(handles.hbutton1,'enable','off');
     set(handles.hbutton3,'enable','on');
